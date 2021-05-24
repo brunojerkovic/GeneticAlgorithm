@@ -2,7 +2,6 @@ import random
 import numpy as np
 import copy
 import enum
-print("HI")
 
 class Selection:
     @staticmethod
