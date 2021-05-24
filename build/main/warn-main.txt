@@ -128,7 +128,7 @@ missing module named six.moves.range - imported by six.moves (top-level), dateut
 missing module named six.moves.zip - imported by six.moves (top-level), cycler (top-level)
 missing module named StringIO - imported by PyInstaller.lib.modulegraph._compat (conditional), PyInstaller.lib.modulegraph.zipio (conditional), six (conditional)
 missing module named dateutil.tz.tzfile - imported by dateutil.tz (top-level), dateutil.zoneinfo (top-level)
-missing module named olefile - imported by PIL.FpxImagePlugin (top-level), PIL.MicImagePlugin (top-level)
+missing module named olefile - imported by PIL.MicImagePlugin (top-level), PIL.FpxImagePlugin (top-level)
 missing module named 'PySide2.QtGui' - imported by PIL.ImageQt (conditional, optional)
 missing module named PySide2 - imported by PIL.ImageQt (conditional, optional)
 missing module named 'PyQt5.QtGui' - imported by PIL.ImageQt (conditional, optional)
