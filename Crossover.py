@@ -2,10 +2,12 @@ import random
 import numpy as np
 import enum
 from Chromosome import Chromosome
+from functools import wraps
 
 class CrossoverDecorators:
     @staticmethod
     def extract_dec(crossover_fn):
+        @wraps(crossover_fn)
         def inner(cls, p1, p2, p_c=1):
             # The probability that the crossover will happen is p_c
             if random.uniform(0, 1) > p_c:
