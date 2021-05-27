@@ -273,6 +273,7 @@ class TestingGUI:
 
     def start_button_clicked(self, event):
         # Start timer and restart progress bar
+        self.time_passed = 0.
         self.start_time = time.time()
         self.progressbar['value'] = 0.
 
