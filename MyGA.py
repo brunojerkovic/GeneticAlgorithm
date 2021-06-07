@@ -508,8 +508,13 @@ class MultiComponentGeneticAlgorithm:
 
         # Find out the new name for the file
         onlyfiles = [f for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))]
-        last_num = int(onlyfiles[-1].split('_')[0]) if len(onlyfiles) > 0 else 0
-        new_name = str(last_num + 1)
+        file_nums = [int(file.split('_')[0]) for file in onlyfiles] if len(onlyfiles) > 0 else [0]
+        file_nums.sort()
+        #last_num = int(onlyfiles[-1].split('_')[0]) if len(onlyfiles) > 0 else 0
+        new_name = str(file_nums[-1] + 1)
+        new_name = new_name if len(new_name) >= 2 else '0' + new_name
+        #new_name = str(file_nums[-1] + 1) if file_nums[-1] // 10 >= 1 else '0' + str(file_nums[-1] + 1)
+
 
         # Save image files
         plt.figure()
