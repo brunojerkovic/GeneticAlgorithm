@@ -107,8 +107,9 @@ class SelectionTSP(Selection):
 
 class SelectionTest():
     @staticmethod
-    def test_takeover(selection_fn, population_size):
+    def test_takeover(selection_fn, population_size, thresh):
         population_size = population_size if population_size % 2 == 0 else population_size+1
+        avg_intensity = 0.
 
         # Generate population with random fits
         pop = []
@@ -121,15 +122,21 @@ class SelectionTest():
 
         # Perform selection until all of the chromosomes have the best fit
         iters = 0
-        for iter in range(1000):
-            pop.sort(key=lambda x: x.fit)
+        for iter in range(thresh):
+            pop.sort(key=lambda x: x.fit, reverse=True)
             new_pop = [pop[0]]
-            for _ in range(int(population_size/2)-1):
+            for i in range(int(population_size/2)):
                 p1, p2 = selection_fn(pop)
                 new_pop.append(p1)
-                new_pop.append(p2)
+                if i != int(population_size/2)-1:
+                    new_pop.append(p2)
+            fits = np.array([c.fit for c in pop])
+            intensity = (sum(c.fit for c in new_pop)/population_size - np.sum(fits)/population_size) / np.std(fits, axis=0)
+            avg_intensity += intensity
             iters += 1
             if all(id(c) == id(best_c) for c in new_pop):
                 break
             pop = new_pop
-        return iters
+        avg_intensity /= iters
+
+        return iters, avg_intensity

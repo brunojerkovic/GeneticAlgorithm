@@ -29,6 +29,7 @@ class TestingGUI:
 
         self.tt_time = 0.
         self.tt_iters = 0
+        self.sel_intensity = 0.
 
         #region INITIALIZATION
         self.initializations_frame = tk.LabelFrame(self.master_frame, text='INITIALIZATION', padx=5, pady=5)
@@ -268,7 +269,7 @@ class TestingGUI:
 
         # region Selection Takeover Time
         self.sel_tt_frame = tk.LabelFrame(self.master_frame, text='SELECTION TAKEOVER TIME', padx=5, pady=5)
-        self.sel_tt_frame.grid(row=0, column=3)
+        self.sel_tt_frame.grid(row=6, column=0, columnspan=2)
 
         tk.Label(self.sel_tt_frame, fg='black', text='Selection: ').grid(row=0, column=0)
         sel_tt_options = [method for method in dir(SelectionKP) if method.startswith('_') is False]
@@ -294,17 +295,25 @@ class TestingGUI:
         self.sel_tt_iters_lbl = tk.Label(self.sel_tt_frame, fg='black', textvariable=self.sel_tt_iters_var)
         self.sel_tt_iters_lbl.grid(row=3, column=0, columnspan=2)
 
+        self.sel_tt_intensity_var = tk.StringVar(self.sel_tt_frame)
+        self.sel_tt_intensity_var.set(f'Selection intensity: {round(self.sel_intensity, 2)}')
+        self.sel_tt_intensity_lbl = tk.Label(self.sel_tt_frame, fg='black', textvariable=self.sel_tt_intensity_var)
+        self.sel_tt_intensity_lbl.grid(row=4, column=0, columnspan=2)
+
         self.calculate_sel_tt_button = tk.Button(self.sel_tt_frame, text='CALCULATE', cursor='hand2')
         self.calculate_sel_tt_button.bind('<Button-1>', self.calculate_sel_tt_button_clicked)
-        self.calculate_sel_tt_button.grid(row=4, column=0, columnspan=2)
+        self.calculate_sel_tt_button.grid(row=5, column=0, columnspan=2)
         # endregion
 
     def calculate_sel_tt_button_clicked(self, event):
         start_time = time.time()
+        thresh = 10000
         selection_fn = eval('Selection.' + TestingGUI.preprocessing_option_menu_for_enum(self.sel_tt_choice.get()))
-        iters = SelectionTest.test_takeover(selection_fn, int(self.sel_tt_entry.get()))
+        iters, intensity = SelectionTest.test_takeover(selection_fn, int(self.sel_tt_entry.get()), thresh=thresh)
+        iters = iters if iters != thresh else 'Did not reach'
 
-        self.sel_tt_time_var.set(f"Time: {time.time()-start_time}")
+        self.sel_tt_intensity_var.set(f"Selection intensity: {round(intensity, 2)}")
+        self.sel_tt_time_var.set(f"Time: {round(time.time()-start_time, 2)}")
         self.sel_tt_iters_var.set(f"Number of iterations: {iters}")
 
 
