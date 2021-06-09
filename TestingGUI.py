@@ -4,7 +4,7 @@ from MyGA import AlgorithmType, MultiComponentGeneticAlgorithm
 from InitializePopulation import InitializePopulation
 from NextGen import NextGen
 from Fitness import Fitness
-from Selection import SelectionTSP, SelectionKP
+from Selection import SelectionTSP, SelectionKP, Selection, SelectionTest
 from Crossover import CrossoverTSP, CrossoverKP
 from Mutation import MutationTSP, MutationKP
 from enum import Enum
@@ -26,6 +26,9 @@ class TestingGUI:
         self.master_frame.title("Testing Interface")
         self.time_passed = 0.0
         self.start_time = 0.0
+
+        self.tt_time = 0.
+        self.tt_iters = 0
 
         #region INITIALIZATION
         self.initializations_frame = tk.LabelFrame(self.master_frame, text='INITIALIZATION', padx=5, pady=5)
@@ -263,6 +266,48 @@ class TestingGUI:
         self.canvas = MapCanvas(cities_rnd, path_rnd, fit_rnd, self.master_frame, position=(0, 2))
         # endregion
 
+        # region Selection Takeover Time
+        self.sel_tt_frame = tk.LabelFrame(self.master_frame, text='SELECTION TAKEOVER TIME', padx=5, pady=5)
+        self.sel_tt_frame.grid(row=0, column=3)
+
+        tk.Label(self.sel_tt_frame, fg='black', text='Selection: ').grid(row=0, column=0)
+        sel_tt_options = [method for method in dir(SelectionKP) if method.startswith('_') is False]
+        sel_tt_options += [method for method in dir(SelectionTSP) if method.startswith('_') is False and method not in sel_tt_options]
+        sel_tt_options = TestingGUI.preprocessing_enums_for_option_menu(sel_tt_options)
+        self.sel_tt_choice = tk.StringVar(self.sel_tt_frame)
+        self.sel_tt_choice.set(sel_tt_options[0])
+        self.sel_tt_menu = tk.OptionMenu(self.sel_tt_frame, self.sel_tt_choice, *sel_tt_options)
+        self.sel_tt_menu.grid(row=0, column=1)
+
+        tk.Label(self.sel_tt_frame, fg='black', text='Population size: ').grid(row=1, column=0)
+        self.sel_tt_entry = tk.Entry(self.sel_tt_frame, fg='black', bg='white', width=10)
+        self.sel_tt_entry.insert(tk.END, '5')
+        self.sel_tt_entry.grid(row=1, column=1)
+
+        self.sel_tt_time_var = tk.StringVar(self.sel_tt_frame)
+        self.sel_tt_time_var.set(f'Time: {round(self.tt_time, 2)}')
+        self.sel_tt_time_lbl = tk.Label(self.sel_tt_frame, fg='black', textvariable=self.sel_tt_time_var)
+        self.sel_tt_time_lbl.grid(row=2, column=0, columnspan=2)
+
+        self.sel_tt_iters_var = tk.StringVar(self.sel_tt_frame)
+        self.sel_tt_iters_var.set(f'Number of iterations: {round(self.tt_iters, 2)}')
+        self.sel_tt_iters_lbl = tk.Label(self.sel_tt_frame, fg='black', textvariable=self.sel_tt_iters_var)
+        self.sel_tt_iters_lbl.grid(row=3, column=0, columnspan=2)
+
+        self.calculate_sel_tt_button = tk.Button(self.sel_tt_frame, text='CALCULATE', cursor='hand2')
+        self.calculate_sel_tt_button.bind('<Button-1>', self.calculate_sel_tt_button_clicked)
+        self.calculate_sel_tt_button.grid(row=4, column=0, columnspan=2)
+        # endregion
+
+    def calculate_sel_tt_button_clicked(self, event):
+        start_time = time.time()
+        selection_fn = eval('Selection.' + TestingGUI.preprocessing_option_menu_for_enum(self.sel_tt_choice.get()))
+        iters = SelectionTest.test_takeover(selection_fn, int(self.sel_tt_entry.get()))
+
+        self.sel_tt_time_var.set(f"Time: {time.time()-start_time}")
+        self.sel_tt_iters_var.set(f"Number of iterations: {iters}")
+
+
     def update_progress(self, chromosome):
         if not self.separately_choice.get():
             self.progressbar['value'] += 1 / int(self.iteration_number_entry.get()) * 100
@@ -274,6 +319,7 @@ class TestingGUI:
     def start_button_clicked(self, event):
         # Start timer and restart progress bar
         self.time_passed = 0.
+        selection_tsp_fn = eval('Selection.' + TestingGUI.preprocessing_option_menu_for_enum(self.selection_tsp_choice.get()))
         self.start_time = time.time()
         self.progressbar['value'] = 0.
 

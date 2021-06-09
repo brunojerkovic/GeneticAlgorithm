@@ -2,6 +2,7 @@ import random
 import numpy as np
 import copy
 import enum
+from Chromosome import Chromosome
 
 class Selection:
     @staticmethod
@@ -103,3 +104,32 @@ class SelectionKP(Selection):
 
 class SelectionTSP(Selection):
     pass
+
+class SelectionTest():
+    @staticmethod
+    def test_takeover(selection_fn, population_size):
+        population_size = population_size if population_size % 2 == 0 else population_size+1
+
+        # Generate population with random fits
+        pop = []
+        for c in range(population_size):
+            x = Chromosome()
+            x.fit = round(np.random.uniform() *100, 2)
+            pop.append(x)
+        max_fit = max(c.fit for c in pop)
+        best_c = [c for c in pop if c.fit == max_fit][0]
+
+        # Perform selection until all of the chromosomes have the best fit
+        iters = 0
+        for iter in range(1000):
+            pop.sort(key=lambda x: x.fit)
+            new_pop = [pop[0]]
+            for _ in range(int(population_size/2)-1):
+                p1, p2 = selection_fn(pop)
+                new_pop.append(p1)
+                new_pop.append(p2)
+            iters += 1
+            if all(id(c) == id(best_c) for c in new_pop):
+                break
+            pop = new_pop
+        return iters

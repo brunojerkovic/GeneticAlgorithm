@@ -297,17 +297,14 @@ class MultiComponentGeneticAlgorithm:
 
             # Perform evaluation of mutated offsprings
             for offspring in offsprings:
-                offspring.fit = Fitness.fitness_tsp(offspring, self.problem)
+                offspring.fit = Fitness.fitness_ttp(offspring, self.problem)
 
             # Perfrom Local Search
-            chromosome_offsprings = [
-                self.local_search(chromosome, self.problem, Fitness.fitness_tsp, self.gen_neighborhood_tsp,
-                                  self.gen_neighborhood_kp, self.n_neighbors, self.max_loc_search_iters) for chromosome
-                in offsprings]
+            chromosome_offsprings = [self.local_search(chromosome, self.problem, Fitness.fitness_ttp, self.gen_neighborhood_tsp,
+                                  self.gen_neighborhood_kp, self.n_neighbors, self.max_loc_search_iters) for chromosome in offsprings]
 
             # Add evaluated offsprings to new generation and sort it by fit
-            pop_new += chromosome_offsprings[:-1] if children_needed < len(
-                chromosome_offsprings) else chromosome_offsprings
+            pop_new += chromosome_offsprings[:-1] if children_needed < len(chromosome_offsprings) else chromosome_offsprings
             pop_new.sort(key=lambda x: x.fit, reverse=True)
 
             # New generation becomes the one usable for later
@@ -421,10 +418,10 @@ class MultiComponentGeneticAlgorithm:
                 offspring = Chromosome(path=mutated_offspring_tsp.path, knapsack=parent1_tsp.knapsack)
 
                 # Evaluate offspring
-                offspring.fit = Fitness.fitness_tsp(offspring, self.problem)
+                offspring.fit = Fitness.fitness_ttp(offspring, self.problem)
 
                 # Perform local search
-                chromosome_offspring = self.local_search(offspring, self.problem, Fitness.fitness_tsp,
+                chromosome_offspring = self.local_search(offspring, self.problem, Fitness.fitness_ttp,
                                                          self.gen_neighborhood_tsp, self.gen_neighborhood_kp,
                                                          self.n_neighbors, self.max_loc_search_iters)
 
@@ -536,6 +533,7 @@ class MultiComponentGeneticAlgorithm:
         # Save text file
         vals = {
             'Algorithm type: ': self.algorithm_type,
+            'Perform separately': self.perform_separately,
             'Population Initialization function: ': self.init_population.__name__,
             'Next Generation function: ': self.insert_offspring_into_population.__name__,
             'Fitness function: ': self.fitness.__name__,
@@ -547,7 +545,7 @@ class MultiComponentGeneticAlgorithm:
             'Mutation KP: ': self.mutation_kp.__name__,
             'Population size: ': self.pop_size,
             'Iteration number: ': self.iter_num,
-            'Survival/mortality rate: ': self.survival_rate if AlgorithmType.GENERATIONAL.value == 'generational' else self.mortality_rate,
+            'Survival/mortality rate: ': self.survival_rate if self.algorithm_type.value == 'generational' else self.mortality_rate,
             'Elitism: ': self.elitism,
             'TSP path: ': self.best.path,
             'KP path: ': self.best.knapsack,

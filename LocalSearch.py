@@ -26,7 +26,7 @@ class LocalSearch:
             current_solution = neighbors[0]
 
             # Stop if current solution is worse than the best one
-            if i != 0 and current_solution.fit == prev_solution.fit:
+            if i != 0 and current_solution.fit == prev_solution.fit: #Don't worry that for i==0 'prev_solution' is not defined, because it will never evaluate it for i==0
                 break
             if current_solution.fit > best_solution.fit:
                 best_solution = current_solution
