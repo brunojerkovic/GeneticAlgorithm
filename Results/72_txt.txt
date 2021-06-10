@@ -1,0 +1,27 @@
+Algorithm type: =AlgorithmType.GENERATIONAL
+_Perform separately=True
+_Population Initialization function: =init_population
+_Next Generation function: =replace_the_worst_parent
+_Fitness function: =fitness_ttp
+_Selection TSP: =r_tournament_selection_with_replacement
+_Crossover TSP=order_crossover
+_Mutation TSP: =two_opt
+_Selection KP: =r_tournament_selection_with_replacement
+_Crossover KP: =n_point_crossover
+_Mutation KP: =exchange
+_Population size: =10
+_Iteration number: =15
+_Survival/mortality rate: =3
+_Elitism: =True
+_TSP path: =[44, 25, 40, 42, 36, 18, 21, 0, 16, 24, 37, 2, 11, 27, 47, 5, 1, 8, 50, 23, 7, 4, 20, 22, 12, 35, 3, 26, 33, 48, 14, 9, 45, 43, 29, 10, 41, 31, 34, 32, 39, 38, 49, 19, 51, 6, 17, 28, 15, 30, 46, 13]
+_KP path: =[[], [0, 1, 0, 1, 1, 1, 0, 1, 1, 1], [1, 0, 1, 0, 0, 1, 0, 0, 0, 1], [0, 1, 0, 1, 1, 1, 1, 1, 0, 0], [1, 1, 1, 0, 1, 1, 1, 1, 0, 1], [0, 0, 1, 0, 0, 1, 0, 0, 1, 0], [1, 0, 0, 0, 1, 1, 1, 1, 0, 1], [0, 0, 1, 0, 1, 0, 0, 1, 0, 1], [1, 1, 0, 0, 0, 1, 0, 1, 1, 1], [0, 1, 1, 1, 1, 0, 0, 1, 0, 1], [0, 1, 0, 0, 1, 1, 0, 1, 0, 1], [0, 1, 0, 1, 1, 0, 1, 1, 0, 1], [1, 0, 1, 0, 1, 0, 1, 0, 1, 0], [1, 0, 0, 0, 0, 1, 0, 1, 0, 1], [1, 0, 1, 0, 1, 0, 1, 0, 0, 1], [1, 1, 1, 1, 0, 0, 1, 1, 0, 1], [0, 1, 1, 0, 0, 0, 0, 0, 1, 0], [0, 0, 1, 0, 1, 1, 1, 0, 1, 1], [0, 0, 0, 0, 0, 1, 1, 1, 1, 0], [0, 0, 1, 1, 1, 1, 1, 0, 1, 1], [1, 0, 1, 0, 0, 0, 1, 1, 0, 1], [1, 0, 1, 1, 1, 0, 0, 0, 1, 0], [1, 1, 1, 0, 1, 1, 0, 0, 0, 0], [1, 1, 0, 0, 1, 0, 0, 1, 0, 0], [0, 0, 1, 0, 0, 0, 0, 0, 1, 1], [0, 1, 1, 1, 0, 1, 1, 1, 1, 0], [1, 0, 0, 0, 0, 1, 0, 0, 0, 0], [1, 0, 0, 1, 1, 0, 1, 0, 1, 1], [0, 1, 1, 1, 0, 0, 1, 0, 0, 0], [0, 1, 1, 0, 1, 1, 0, 0, 1, 0], [0, 0, 0, 1, 1, 1, 0, 1, 0, 0], [0, 1, 0, 0, 1, 1, 0, 1, 1, 0], [1, 0, 0, 1, 1, 0, 1, 1, 1, 0], [0, 1, 1, 1, 0, 0, 0, 0, 0, 1], [0, 0, 0, 1, 1, 0, 1, 0, 0, 1], [0, 1, 0, 1, 0, 1, 0, 0, 0, 0], [1, 1, 1, 0, 1, 0, 1, 0, 0, 0], [1, 1, 1, 1, 0, 1, 1, 0, 1, 1], [0, 0, 1, 0, 1, 0, 1, 1, 0, 1], [0, 1, 0, 0, 1, 1, 1, 1, 1, 0], [1, 1, 1, 0, 0, 1, 0, 1, 0, 1], [0, 0, 1, 1, 1, 0, 1, 1, 0, 1], [0, 1, 1, 0, 1, 1, 1, 0, 0, 1], [0, 1, 1, 1, 0, 0, 0, 0, 1, 1], [1, 1, 1, 0, 1, 1, 1, 1, 0, 0], [1, 0, 0, 0, 0, 0, 0, 1, 0, 1], [0, 1, 0, 0, 1, 0, 1, 1, 1, 1], [0, 1, 0, 1, 0, 1, 1, 1, 0, 0], [0, 0, 0, 0, 1, 1, 0, 1, 1, 0], [1, 0, 1, 0, 1, 1, 0, 1, 1, 1], [1, 0, 0, 0, 1, 1, 1, 1, 1, 1], [0, 1, 1, 0, 0, 0, 0, 0, 1, 0]]
+_Fitness value of the best chromosome: =21649.36026198946
+_Average fitness value of the population: =10562.847506573671
+_Age of the best chromosome (num of iterations it has lived): =4
+_Local Search function: =greedy_hill_climbing
+_Neighborhood TSP: =insertion
+_Neighborhood KP: =bit_flip
+_Number of neighbors: =10
+_Number of max iterations in local search: =20
+_KP constraint solver function: =kp_hard_constraint_solver
+_

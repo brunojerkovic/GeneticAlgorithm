@@ -10,7 +10,7 @@ from MyGA import MultiComponentGeneticAlgorithm
 import time
 
 class MapCanvas:
-    def __init__(self, cities, path, fit, master_frame, position=(0,1), canvas_shape=(500, 500), time=0.0):
+    def __init__(self, cities, path, fit, avg_fit, master_frame, position=(0,1), canvas_shape=(500, 500), time=0.0):
         # region INIT ATTRIBUTES
         self.canvas_shape = canvas_shape
         self.master_frame = master_frame
@@ -36,9 +36,14 @@ class MapCanvas:
         self.city_num_lbl.pack()
 
         self.fitness_num_var = tk.StringVar()
-        self.fitness_num_var.set(f'Fitness: {round(fit, 2)}')
+        self.fitness_num_var.set(f'Fitness of the best chromosome: {round(fit, 2)}')
         self.fitness_num_lbl = tk.Label(self.results_frame, fg='black', textvariable=self.fitness_num_var)
         self.fitness_num_lbl.pack()
+
+        self.avg_fitness_num_var = tk.StringVar()
+        self.avg_fitness_num_var.set(f'Average fitness of population: {round(avg_fit, 2)}')
+        self.avg_fitness_num_lbl = tk.Label(self.results_frame, fg='black', textvariable=self.avg_fitness_num_var)
+        self.avg_fitness_num_lbl.pack()
 
         self.time_num_var = tk.StringVar()
         self.time_num_var.set(f'Time: {round(time, 2)}s')
@@ -70,8 +75,9 @@ class MapCanvas:
         self.canvas.delete('all')
         self.draw_city_dots()
 
-    def update_table(self, fit, time):
-        self.fitness_num_var.set(f'Fitness: {round(fit, 2)}')
+    def update_table(self, fit, avg_fit, time):
+        self.avg_fitness_num_var.set(f'Average fitness of population: {round(avg_fit, 2)}')
+        self.fitness_num_var.set(f'Fitness of the best chromosome: {round(fit, 2)}')
         self.time_num_var.set(f'Time: {round(time, 2)}s')
 
     def normalize_data_on_canvas(self, coords, pad=10):

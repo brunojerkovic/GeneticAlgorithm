@@ -7,6 +7,7 @@ from Problem import Problem
 import os
 from KPHardConstraintSolver import KPHardConstraintSolver
 from Fitness import Fitness
+from statistics import mean
 
 class AlgorithmType(Enum):
     GENERATIONAL = 'generational'
@@ -18,7 +19,7 @@ class MultiComponentGeneticAlgorithm:
                  selection_kp_fn, crossover_kp_fn, mutation_kp_fn, gen_neighborhood_kp_fn,
                  pop_size=5, mortality_rate=None, survival_rate=None, elitism=True, n_neighbors=20, max_loc_search_iters=1, gui=None,
                  p_c_tsp=1., p_m_tsp=1., p_c_kp=1., p_m_kp=1.,
-                 perform_separately=False):
+                 perform_separately=False, ret_avg_fit=True):
         # Initialize type of the algorithm
         self.algorithm_type = algorithm_type
         self.perform_separately = perform_separately
@@ -31,6 +32,7 @@ class MultiComponentGeneticAlgorithm:
         self.p_m_kp = p_m_kp
 
         # Initialize general operators
+        self.ret_avg_fit = ret_avg_fit
         self.init_population = init_population_fn
         self.insert_offspring_into_population = insert_offspring_into_population
         self.fitness = fitness_fn
@@ -71,20 +73,19 @@ class MultiComponentGeneticAlgorithm:
             chromosome.fit = self.fitness(chromosome, problem)
         self.pop.sort(key=lambda x: x.fit, reverse=True)
 
-    def run(self, iter_num=10) -> Chromosome:
+
+    def run(self, iter_num=10):
         """
         Run the GA.
         :param iter_num: Number of iterations of GA
         :return: Best chromosome after these iterations
         """
         if self.algorithm_type == AlgorithmType.GENERATIONAL:
-            best = self.generational_algorithm(iter_num)
+            return self.generational_algorithm(iter_num)
         elif self.algorithm_type == AlgorithmType.STEADY_STATE:
-            best = self.steady_state_algorithm(iter_num)
+            return self.steady_state_algorithm(iter_num)
         else:
             raise Exception("Requested algorithm type is not yet available.")
-
-        return best
     
     def generational_algorithm(self, iter_num):
         if self.perform_separately:
@@ -179,10 +180,16 @@ class MultiComponentGeneticAlgorithm:
             #endregion
 
             # Update GUI progressbar
-            self.gui.update_progress(self.pop[0])
+            self.avg = mean(c.fit for c in self.pop)
+            self.gui.update_progress(self.pop[0], self.avg)
 
+        # Return best/average fit of population
         self.best = self.pop[0]
-        return self.best
+        if self.ret_avg_fit:
+            self.avg = mean(c.fit for c in self.pop)
+            return self.best, self.avg
+        else:
+            return self.best
 
     def steady_state_joint_algorithm(self, iter_num):
         self.iter_num += iter_num
@@ -244,10 +251,16 @@ class MultiComponentGeneticAlgorithm:
             self.best_fits.append(self.pop[0].fit)
 
             # Update GUI progressbar
-            self.gui.update_progress(self.best)
+            self.avg = mean(c.fit for c in self.pop)
+            self.gui.update_progress(self.best, self.avg)
 
-        # Return the best value out of the last generation
-        return self.best
+        # Return best/average fit of population
+        self.best = self.pop[0]
+        if self.ret_avg_fit:
+            self.avg = mean(c.fit for c in self.pop)
+            return self.best, self.avg
+        else:
+            return self.best
 
     def generational_separate_algortihm(self, iter_num):
         self.iter_num += iter_num
@@ -316,7 +329,8 @@ class MultiComponentGeneticAlgorithm:
             # endregion
 
             # Update GUI progressbar
-            self.gui.update_progress(self.pop[0])
+            self.avg = mean(c.fit for c in self.pop)
+            self.gui.update_progress(self.pop[0], self.avg)
 
         for i in range(iter_num):
             # region GETTING THINGS READY
@@ -388,10 +402,17 @@ class MultiComponentGeneticAlgorithm:
             # endregion
 
             # Update GUI progressbar
-            self.gui.update_progress(self.pop[0])
+            self.avg = mean(c.fit for c in self.pop)
+            self.gui.update_progress(self.pop[0], self.avg)
 
+
+        # Return best/average fit of population
         self.best = self.pop[0]
-        return self.best
+        if self.ret_avg_fit:
+            self.avg = mean(c.fit for c in self.pop)
+            return self.best, self.avg
+        else:
+            return self.best
 
     def steady_state_separate_algorithm(self, iter_num):
         self.iter_num += iter_num
@@ -441,7 +462,8 @@ class MultiComponentGeneticAlgorithm:
             # endregion
 
             # Update GUI progressbar
-            self.gui.update_progress(self.best)
+            self.avg = mean(c.fit for c in self.pop)
+            self.gui.update_progress(self.best, self.avg)
 
         for i in range(iter_num):
             for _ in range(self.mortality_rate):
@@ -487,12 +509,18 @@ class MultiComponentGeneticAlgorithm:
             # endregion
 
             # Update GUI progressbar
-            self.gui.update_progress(self.best)
+            self.avg = mean(c.fit for c in self.pop)
+            self.gui.update_progress(self.best, self.avg)
 
-        # Return the best value out of the last generation
-        return self.best
+        # Return best/average fit of population
+        self.best = self.pop[0]
+        if self.ret_avg_fit:
+            self.avg = mean(c.fit for c in self.pop)
+            return self.best, self.avg
+        else:
+            return self.best
 
-    def save_results(self, best_solution, img_name=random.randint(1, 1000)):
+    def save_results(self, best_solution, avg_fits, filename, img_name=random.randint(1, 1000)):
         """
         Function to plot the list of average fits of iterations.
         :return: None
@@ -532,6 +560,7 @@ class MultiComponentGeneticAlgorithm:
 
         # Save text file
         vals = {
+            'Filename: ': filename,
             'Algorithm type: ': self.algorithm_type,
             'Perform separately': self.perform_separately,
             'Population Initialization function: ': self.init_population.__name__,
@@ -549,7 +578,8 @@ class MultiComponentGeneticAlgorithm:
             'Elitism: ': self.elitism,
             'TSP path: ': self.best.path,
             'KP path: ': self.best.knapsack,
-            'Fitness value: ': self.best.fit,
+            'Fitness value of the best chromosome: ': best_solution.fit,
+            'Average fitness value of the population: ': avg_fits,
             'Age of the best chromosome (num of iterations it has lived): ': self.best.age,
             'Local Search function: ': self.local_search.__name__,
             'Neighborhood TSP: ': self.gen_neighborhood_tsp.__name__,

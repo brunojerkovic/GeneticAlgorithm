@@ -56,10 +56,10 @@ class Selection:
         pop = np.array(pop, dtype=object)
         pop_size = len(pop)
         min_fit = min(c.fit for c in pop)
-        fits_ = np.array([c.fit-min_fit for c in pop])
+        fits_ = np.array([c.fit - min_fit for c in pop])
         fits = np.array([sum(fits_[:i]) for i in range(len(fits_) + 1)])
         F = np.sum(fits_)
-        r = round(random.random() * F/K, 5)
+        r = round(random.random() * F / K, 5)
 
         indexes = []
         j = K
@@ -67,13 +67,12 @@ class Selection:
             r += j * F / K
             r %= max(fits)
             for i in range(len(fits)):
-                if fits[i - 1] < r < fits[i] and (i-1)%pop_size not in indexes:
+                if fits[i - 1] < r < fits[i] and (i - 1) % pop_size not in indexes:
                     indexes.append((i - 1) % pop_size)
                     j -= 1
                     break
             if j == 0:
                 break
-
 
         if len(indexes) != K:
             raise Exception("Error in Stohastic Universal Sampling")

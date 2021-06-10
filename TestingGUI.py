@@ -72,7 +72,7 @@ class TestingGUI:
         next_gen_options = [method for method in dir(NextGen) if method.startswith('_') is False]
         next_gen_options = TestingGUI.preprocessing_enums_for_option_menu(next_gen_options)
         self.next_gen_choice = tk.StringVar(self.primary_functions_frame)
-        self.next_gen_choice.set(next_gen_options[0])
+        self.next_gen_choice.set(next_gen_options[1])
         self.next_gen_menu = tk.OptionMenu(self.primary_functions_frame, self.next_gen_choice, *next_gen_options)
         self.next_gen_menu.grid(row=1, column=1)
 
@@ -100,12 +100,12 @@ class TestingGUI:
 
         tk.Label(self.parameters_frame, fg='black', text='Population size: ').grid(row=0, column=0)
         self.population_size_entry = tk.Entry(self.parameters_frame, fg='black', bg='white', width=10)
-        self.population_size_entry.insert(tk.END, '5')
+        self.population_size_entry.insert(tk.END, '10')
         self.population_size_entry.grid(row=0, column=1)
 
         tk.Label(self.parameters_frame, fg='black', text='Iteration number: ').grid(row=1, column=0)
         self.iteration_number_entry = tk.Entry(self.parameters_frame, fg='black', bg='white', width=10)
-        self.iteration_number_entry.insert(tk.END, '10')
+        self.iteration_number_entry.insert(tk.END, '15')
         self.iteration_number_entry.grid(row=1, column=1)
 
         self.set_survival_mortality_rate()
@@ -125,7 +125,7 @@ class TestingGUI:
         selection_tsp_options = [method for method in dir(SelectionTSP) if method.startswith('_') is False]
         selection_tsp_options = TestingGUI.preprocessing_enums_for_option_menu(selection_tsp_options)
         self.selection_tsp_choice = tk.StringVar(self.tsp_frame)
-        self.selection_tsp_choice.set(selection_tsp_options[0])
+        self.selection_tsp_choice.set(selection_tsp_options[1])
         self.selection_tsp_menu = tk.OptionMenu(self.tsp_frame, self.selection_tsp_choice, *selection_tsp_options)
         self.selection_tsp_menu.grid(row=0, column=1)
 
@@ -133,7 +133,7 @@ class TestingGUI:
         crossover_tsp_options = [method for method in dir(CrossoverTSP) if method.startswith('_') is False and method.endswith('dec') is False]
         crossover_tsp_options = TestingGUI.preprocessing_enums_for_option_menu(crossover_tsp_options)
         self.crossover_tsp_choice = tk.StringVar(self.tsp_frame)
-        self.crossover_tsp_choice.set(crossover_tsp_options[0])
+        self.crossover_tsp_choice.set(crossover_tsp_options[1])
         self.crossover_tsp_menu = tk.OptionMenu(self.tsp_frame, self.crossover_tsp_choice, *crossover_tsp_options)
         self.crossover_tsp_menu.grid(row=1, column=1)
 
@@ -146,13 +146,13 @@ class TestingGUI:
         mutation_tsp_options = [method for method in dir(MutationTSP) if method.startswith('_') is False]
         mutation_tsp_options = TestingGUI.preprocessing_enums_for_option_menu(mutation_tsp_options)
         self.mutation_tsp_choice = tk.StringVar(self.tsp_frame)
-        self.mutation_tsp_choice.set(mutation_tsp_options[0])
+        self.mutation_tsp_choice.set(mutation_tsp_options[1])
         self.mutation_tsp_menu = tk.OptionMenu(self.tsp_frame, self.mutation_tsp_choice, *mutation_tsp_options)
         self.mutation_tsp_menu.grid(row=3, column=1)
 
         tk.Label(self.tsp_frame, fg='black', text='Mutation prob: ').grid(row=4, column=0)
         self.p_m_tsp_entry = tk.Entry(self.tsp_frame, fg='black', bg='white', width=10)
-        self.p_m_tsp_entry.insert(tk.END, '1.')
+        self.p_m_tsp_entry.insert(tk.END, '0.02')
         self.p_m_tsp_entry.grid(row=4, column=1)
         # endregion
 
@@ -164,7 +164,7 @@ class TestingGUI:
         selection_kp_options = [method for method in dir(SelectionKP) if method.startswith('_') is False]
         selection_kp_options = TestingGUI.preprocessing_enums_for_option_menu(selection_kp_options)
         self.selection_kp_choice = tk.StringVar(self.kp_frame)
-        self.selection_kp_choice.set(selection_kp_options[0])
+        self.selection_kp_choice.set(selection_kp_options[1])
         self.selection_kp_menu = tk.OptionMenu(self.kp_frame, self.selection_kp_choice, *selection_kp_options)
         self.selection_kp_menu.grid(row=0, column=1)
 
@@ -185,13 +185,13 @@ class TestingGUI:
         mutation_kp_options = [method for method in dir(MutationKP) if method.startswith('_') is False]
         mutation_kp_options = TestingGUI.preprocessing_enums_for_option_menu(mutation_kp_options)
         self.mutation_kp_choice = tk.StringVar(self.kp_frame)
-        self.mutation_kp_choice.set(mutation_kp_options[0])
+        self.mutation_kp_choice.set(mutation_kp_options[1])
         self.mutation_tsp_menu = tk.OptionMenu(self.kp_frame, self.mutation_kp_choice, *mutation_kp_options)
         self.mutation_tsp_menu.grid(row=3, column=1)
 
         tk.Label(self.kp_frame, fg='black', text='Mutation prob: ').grid(row=4, column=0)
         self.p_m_kp_entry = tk.Entry(self.kp_frame, fg='black', bg='white', width=10)
-        self.p_m_kp_entry.insert(tk.END, '1.')
+        self.p_m_kp_entry.insert(tk.END, '0.02')
         self.p_m_kp_entry.grid(row=4, column=1)
         # endregion
 
@@ -244,11 +244,17 @@ class TestingGUI:
 
         self.save_img_choice = tk.IntVar()
         self.save_img_choice.set(1)
-        self.save_img_cb = tk.Checkbutton(self.start_frame, text='Save average fit as jpg and properties as txt', variable=self.save_img_choice, onvalue=1, offvalue=0)
+        self.save_img_cb = tk.Checkbutton(self.start_frame, text='Save average and best fit as jpg plot and configuration as txt', variable=self.save_img_choice, onvalue=1, offvalue=0)
         self.save_img_cb.grid(row=1, column=0, columnspan=2)
 
+        self.do_update = tk.IntVar()
+        self.do_update.set(1)
+        self.do_update_cb = tk.Checkbutton(self.start_frame, text='Update graph after every generation',
+                                          variable=self.do_update, onvalue=1, offvalue=0)
+        self.do_update_cb.grid(row=2, column=0, columnspan=2)
+
         self.progressbar = ttk.Progressbar(self.start_frame, orient=tk.HORIZONTAL, length=100, mode='determinate')
-        self.progressbar.grid(row=2, column=0, columnspan=2)
+        self.progressbar.grid(row=3, column=0, columnspan=2)
         # endregion
 
         # region CANVAS
@@ -263,13 +269,13 @@ class TestingGUI:
                             [580.0,	1175.0, []],
                             [650.0,	1130.0, []]]
         path_rnd = [0,1,2,3,4,5,6,7,8,9]
-        fit_rnd = 0.0
-        self.canvas = MapCanvas(cities_rnd, path_rnd, fit_rnd, self.master_frame, position=(0, 2))
+        fit_rnd, avg_fit_rnd = 0.0, 0.0
+        self.canvas = MapCanvas(cities_rnd, path_rnd, fit_rnd, avg_fit_rnd, self.master_frame, position=(0, 2))
         # endregion
 
         # region Selection Takeover Time
-        self.sel_tt_frame = tk.LabelFrame(self.master_frame, text='SELECTION TAKEOVER TIME', padx=5, pady=5)
-        self.sel_tt_frame.grid(row=6, column=0, columnspan=2)
+        self.sel_tt_frame = tk.LabelFrame(self.master_frame, text='SELECTION INTENSITY AND TAKEOVER TIME', padx=5, pady=5)
+        self.sel_tt_frame.grid(row=5, column=2, columnspan=2)
 
         tk.Label(self.sel_tt_frame, fg='black', text='Selection: ').grid(row=0, column=0)
         sel_tt_options = [method for method in dir(SelectionKP) if method.startswith('_') is False]
@@ -285,31 +291,36 @@ class TestingGUI:
         self.sel_tt_entry.insert(tk.END, '5')
         self.sel_tt_entry.grid(row=1, column=1)
 
+        tk.Label(self.sel_tt_frame, fg='black', text='Iteration threshold: ').grid(row=2, column=0)
+        self.sel_tt_thresh_entry = tk.Entry(self.sel_tt_frame, fg='black', bg='white', width=10)
+        self.sel_tt_thresh_entry.insert(tk.END, '10000')
+        self.sel_tt_thresh_entry.grid(row=2, column=1)
+
         self.sel_tt_time_var = tk.StringVar(self.sel_tt_frame)
         self.sel_tt_time_var.set(f'Time: {round(self.tt_time, 2)}')
         self.sel_tt_time_lbl = tk.Label(self.sel_tt_frame, fg='black', textvariable=self.sel_tt_time_var)
-        self.sel_tt_time_lbl.grid(row=2, column=0, columnspan=2)
+        self.sel_tt_time_lbl.grid(row=3, column=0, columnspan=2)
 
         self.sel_tt_iters_var = tk.StringVar(self.sel_tt_frame)
         self.sel_tt_iters_var.set(f'Number of iterations: {round(self.tt_iters, 2)}')
         self.sel_tt_iters_lbl = tk.Label(self.sel_tt_frame, fg='black', textvariable=self.sel_tt_iters_var)
-        self.sel_tt_iters_lbl.grid(row=3, column=0, columnspan=2)
+        self.sel_tt_iters_lbl.grid(row=4, column=0, columnspan=2)
 
         self.sel_tt_intensity_var = tk.StringVar(self.sel_tt_frame)
         self.sel_tt_intensity_var.set(f'Selection intensity: {round(self.sel_intensity, 2)}')
         self.sel_tt_intensity_lbl = tk.Label(self.sel_tt_frame, fg='black', textvariable=self.sel_tt_intensity_var)
-        self.sel_tt_intensity_lbl.grid(row=4, column=0, columnspan=2)
+        self.sel_tt_intensity_lbl.grid(row=5, column=0, columnspan=2)
 
         self.calculate_sel_tt_button = tk.Button(self.sel_tt_frame, text='CALCULATE', cursor='hand2')
         self.calculate_sel_tt_button.bind('<Button-1>', self.calculate_sel_tt_button_clicked)
-        self.calculate_sel_tt_button.grid(row=5, column=0, columnspan=2)
+        self.calculate_sel_tt_button.grid(row=6, column=0, columnspan=2)
         # endregion
 
     def calculate_sel_tt_button_clicked(self, event):
         start_time = time.time()
         thresh = 10000
         selection_fn = eval('Selection.' + TestingGUI.preprocessing_option_menu_for_enum(self.sel_tt_choice.get()))
-        iters, intensity = SelectionTest.test_takeover(selection_fn, int(self.sel_tt_entry.get()), thresh=thresh)
+        iters, intensity = SelectionTest.test_takeover(selection_fn, int(self.sel_tt_entry.get()), thresh=int(self.sel_tt_thresh_entry.get()))
         iters = iters if iters != thresh else 'Did not reach'
 
         self.sel_tt_intensity_var.set(f"Selection intensity: {round(intensity, 2)}")
@@ -317,23 +328,23 @@ class TestingGUI:
         self.sel_tt_iters_var.set(f"Number of iterations: {iters}")
 
 
-    def update_progress(self, chromosome):
+    def update_progress(self, chromosome, avg_fit):
         if not self.separately_choice.get():
             self.progressbar['value'] += 1 / int(self.iteration_number_entry.get()) * 100
         else:
             self.progressbar['value'] += 1 / int(self.iteration_number_entry.get()) * 100 / 2
         self.start_frame.update_idletasks()
-        self.update_canvas(path=chromosome.path, fit=chromosome.fit, time=time.time()-self.start_time)
+        self.update_canvas(path=chromosome.path, fit=chromosome.fit, avg_fit=avg_fit, time=time.time()-self.start_time)
 
     def start_button_clicked(self, event):
         # Start timer and restart progress bar
         self.time_passed = 0.
-        selection_tsp_fn = eval('Selection.' + TestingGUI.preprocessing_option_menu_for_enum(self.selection_tsp_choice.get()))
         self.start_time = time.time()
         self.progressbar['value'] = 0.
 
         # Load the problem
-        self.problem = LoadDataset.load_problem_ttp(self.dataset_path_entry.get().replace("\\", "/"))
+        filename = self.dataset_path_entry.get().replace("\\", "/")
+        self.problem = LoadDataset.load_problem_ttp(filename)
 
         # Draw cities on canvas
         self.update_canvas(self.problem.cities)
@@ -376,14 +387,14 @@ class TestingGUI:
                  perform_separately=perform_separately)
 
         # Find the best solution with GA
-        best_solution = myGA.run(iter_num)
+        best_solution, avg_fits = myGA.run(iter_num)
 
         # End timer
         self.time_passed = time.time() - self.start_time
 
         # Save the results
         if self.save_img_choice.get() == 1:
-            myGA.save_results(best_solution)
+            myGA.save_results(best_solution, avg_fits, filename)
 
     def set_survival_mortality_rate(self, *args):
         algorithm_type = TestingGUI.preprocessing_option_menu_for_enum(self.algorithm_type_choice.get())
@@ -393,7 +404,7 @@ class TestingGUI:
             tk.Label(self.parameters_frame, fg='black', text='Mortality rate: ').grid(row=2, column=0)
 
         self.survival_mortality_entry = tk.Entry(self.parameters_frame, fg='black', bg='white', width=10)
-        self.survival_mortality_entry.insert(tk.END, '0.5') if algorithm_type == AlgorithmType.STEADY_STATE.value else self.survival_mortality_entry.insert(tk.END, '0.1')
+        self.survival_mortality_entry.insert(tk.END, '0.7') if algorithm_type == AlgorithmType.STEADY_STATE.value else self.survival_mortality_entry.insert(tk.END, '0.1')
         self.survival_mortality_entry.grid(row=2, column=1)
 
 
@@ -410,13 +421,13 @@ class TestingGUI:
     def preprocessing_option_menu_for_enum(val: Enum):
         return val.lower().replace(' ', '_')
 
-    def update_canvas(self, cities=None, path=None, fit=None, time=None):
-        if cities is not None:
+    def update_canvas(self, cities=None, path=None, fit=None, avg_fit=None, time=None):
+        if cities is not None and self.do_update.get() == True:
             self.canvas.update_cities(cities)
-        if path is not None:
+        if path is not None and self.do_update.get() == True:
             self.canvas.update_paths(path)
-        if fit is not None and time is not None:
-            self.canvas.update_table(fit, time)
+        if fit is not None and avg_fit is not None and time is not None:
+            self.canvas.update_table(fit, avg_fit, time)
 
     def run(self):
         self.master_frame.mainloop()
